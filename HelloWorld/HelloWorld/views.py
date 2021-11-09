@@ -3,7 +3,7 @@ import pandas as pd
 from django.http import HttpResponse
 import json
 # Create your views here.
-
+ 
 #1.用户信息
 #post{data:id}
 #http://localhost:8000/userInfo
@@ -52,7 +52,7 @@ def getUserTags(request):
         ]}
     result_json=json.dumps(result)
     return HttpResponse(result_json)
-
+    
 
 #3.贷款信息
 #post{data:id}
