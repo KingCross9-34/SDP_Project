@@ -21,6 +21,7 @@ urlpatterns = [
     path('userInfo',views.getUserInfo),
     path('userTags',views.getUserTags),
     path('loanInfo',views.getLoanInfo),
+    path('loanDefault',views.getLoanDefault),
     path('riskProfile',views.getRiskProfile)
     #path('personal/', include('personal.urls')),
 
