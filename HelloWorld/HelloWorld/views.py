@@ -53,24 +53,28 @@ def getUserTags(request):
         incomeTag='高收入'
     elif userInfo['annual_inc']>150000:
         incomeTag='极高收入'
-    
-    
-    result={'data':[
-        {
-			"key": '收入等级',
-			"label": incomeTag
-		},
-		{
-			"key": '住房情况',
-			"label": userInfo['home_ownership']
-		},
-		{
-			"key": 2,
-			"label": ""
-		}
-        ]}
-    result_json=json.dumps(result)
-    return HttpResponse(result_json)
+    result={
+        'data':{
+        '收入等级':incomeTag,'房屋属性(按揭、租赁、自有、他有)': userInfo['home_ownership'],
+        '地址': userInfo['addr_state'],'过去两年交易数量':userInfo['acc_open_past_24mths'],
+        '逾期账户数量':userInfo['acc_now_delinq'],'信用额度总余额':userInfo['all_util'],
+        '一年内坏账次数':userInfo['chargeoff_within_12_mths'],
+        '两年内逾期超30天的次数':userInfo['delinq_2yrs'],
+        '当前逾期额度':userInfo['delinq_amnt'],
+        '债务收入比':userInfo['dti'],
+        '工作时长':userInfo['emp_length'],
+        '职称':userInfo['emp_title'],
+        '贷款状态':userInfo['loan_status'],
+        '从未逾期交易比例':userInfo['pct_tl_nvr_dlq'],
+        '贬损公共记录的数量':userInfo['pub_rec'],
+        '信用分期账户总额':userInfo['revol_bal'],
+        '贫困':userInfo['hardship_flag'],
+        '贫困类型':userInfo['hardship_type'],
+        '支付方式':userInfo['disbursement_method'],
+        '债务清算状态':userInfo['settlement_status']		
+        }
+        }
+    return JsonResponse(result)
     
 
 #3.违约信息
