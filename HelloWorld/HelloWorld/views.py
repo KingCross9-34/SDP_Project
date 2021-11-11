@@ -4,6 +4,8 @@ from django.http import HttpResponse
 import json
 # Create your views here.
  
+#10000个用户数据
+
 #1.用户信息
 #post{data:id}
 #http://localhost:8000/userInfo
@@ -35,6 +37,12 @@ def getUserInfo(request):
 #http://localhost:8000/userTags
 def getUserTags(request):
     id=int(request.POST['id'])
+    if id>=10000:
+        response={'status':404}
+        return_json=json.dumps(response)
+        return HttpResponse(return_json)
+    
+    data=pd.read_csv('static/data.csv',nrows=10000)
     #未决定标签
     result={'data':[
         {
