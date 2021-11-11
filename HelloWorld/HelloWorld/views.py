@@ -41,7 +41,7 @@ def getUserTags(request):
     
     data=pd.read_csv('static/data.csv',nrows=10000)
     userInfo=data.loc[id]
-    #未决定标签
+    #标签
     incomeTag=''
     if userInfo['annual_inc']==0:
         incomeTag='无收入'
@@ -53,25 +53,56 @@ def getUserTags(request):
         incomeTag='高收入'
     elif userInfo['annual_inc']>150000:
         incomeTag='极高收入'
+
+    chargeoff_within_12_mths_Tag='少'
+    if userInfo['chargeoff_within_12_mths']!=0:
+        chargeoff_within_12_mths_Tag='多'
+    
+    acc_open_past_24mths_Tag='交易数量中等'
+    if userInfo['acc_open_past_24mths']<=5:
+        acc_open_past_24mths_Tag='交易数量少'
+    elif userInfo['acc_open_past_24mths_Tag']>=10:
+        acc_open_past_24mths_Tag='交易频繁'
+
+    acc_now_delinq_Tag='无逾期账户'
+    if userInfo['acc_now_delinq']>=1:
+        acc_now_delinq_Tag='逾期账户多'
+
     result={
         'data':{
-        '收入等级':incomeTag,'房屋属性(按揭、租赁、自有、他有)': userInfo['home_ownership'],
-        '地址': userInfo['addr_state'],'过去两年交易数量':userInfo['acc_open_past_24mths'],
-        '逾期账户数量':userInfo['acc_now_delinq'],'信用额度总余额':userInfo['all_util'],
-        '一年内坏账次数':userInfo['chargeoff_within_12_mths'],
-        '两年内逾期超30天的次数':userInfo['delinq_2yrs'],
-        '当前逾期额度':userInfo['delinq_amnt'],
-        '债务收入比':userInfo['dti'],
-        '工作时长':userInfo['emp_length'],
-        '职称':userInfo['emp_title'],
-        '贷款状态':userInfo['loan_status'],
-        '从未逾期交易比例':userInfo['pct_tl_nvr_dlq'],
-        '贬损公共记录的数量':userInfo['pub_rec'],
-        '信用分期账户总额':userInfo['revol_bal'],
-        '贫困':userInfo['hardship_flag'],
-        '贫困类型':userInfo['hardship_type'],
-        '支付方式':userInfo['disbursement_method'],
-        '债务清算状态':userInfo['settlement_status']		
+        'annual_inc':{
+            'annual_inc':userInfo['annual_inc'],
+            'incomeTag':incomeTag,
+            'rank':data[data['annual_inc']<userInfo['annual_inc']].shape[0]/10000 #排名
+            },
+        'acc_open_past_24mths':{
+            'acc_open_past_24mths':userInfo['acc_open_past_24mths'],
+            'Tag':acc_open_past_24mths_Tag
+            },
+        'acc_now_delinq':{
+            'acc_now_delinq':userInfo['acc_now_delinq'],
+            'Tag':acc_now_delinq_Tag
+            },
+        'chargeoff_within_12_mths':{
+            'chargeoff_within_12_mths':userInfo['chargeoff_within_12_mths'],
+            'Tag':chargeoff_within_12_mths_Tag        
+            },
+        'home_ownership': userInfo['home_ownership'],
+        'addr_state': userInfo['addr_state'],
+        'all_util':userInfo['all_util'],
+        'delinq_2yrs':userInfo['delinq_2yrs'],
+        'delinq_amnt':userInfo['delinq_amnt'],
+        'dti':userInfo['dti'],
+        'emp_length':userInfo['emp_length'],
+        'emp_title':userInfo['emp_title'],
+        'loan_status':userInfo['loan_status'],
+        'pct_tl_nvr_dlq':userInfo['pct_tl_nvr_dlq'],
+        'pub_rec':userInfo['pub_rec'],
+        'revol_bal':userInfo['revol_bal'],
+        'hardship_flag':userInfo['hardship_flag'],
+        'hardship_type':userInfo['hardship_type'],
+        'disbursement_method':userInfo['disbursement_method'],
+        'settlement_status':userInfo['settlement_status']		
         }
         }
     return JsonResponse(result)
