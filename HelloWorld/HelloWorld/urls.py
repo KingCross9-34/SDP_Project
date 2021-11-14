@@ -22,7 +22,8 @@ urlpatterns = [
     path('userTags',views.getUserTags),
     path('loanInfo',views.getLoanInfo),
     path('loanDefault',views.getLoanDefault),
-    path('riskProfile',views.getRiskProfile)
-    #path('personal/', include('personal.urls')),
+    path('riskProfile',views.getRiskProfile),
+    path('group/', include('group.urls')),
+    path('personal/', include('personal.urls'))
 
 ]

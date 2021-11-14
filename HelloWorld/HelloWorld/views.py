@@ -41,6 +41,7 @@ def getUserTags(request):
     
     data=pd.read_csv('static/data.csv',nrows=10000)
     userInfo=data.loc[id]
+    
     #标签
     incomeTag=''
     if userInfo['annual_inc']==0:
