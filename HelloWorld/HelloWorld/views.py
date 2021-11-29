@@ -1,7 +1,7 @@
 from django.shortcuts import render
 import pandas as pd
 from django.http import HttpResponse,JsonResponse
-import json
+
 # Create your views here.
  
 #10000个用户数据
@@ -18,8 +18,6 @@ def getUserInfo(request):
  
     data=pd.read_csv('static/data.csv',nrows=10000)
     userInfo=data.loc[id]
-    #result=userInfo.to_json(orient="index")
-    #parsed = json.loads(result) #object
     result={
     'emp_title':userInfo['emp_title'],'emp_length':userInfo['emp_length'],
     'annual_inc':userInfo['annual_inc'],'home_ownership':userInfo['home_ownership'],'loan_amnt':userInfo['loan_amnt']

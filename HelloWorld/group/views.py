@@ -8,7 +8,6 @@ from django.http import HttpResponse,JsonResponse
 def pubRec(request):
     data=pd.read_csv('static/data.csv',nrows=10000)
     pubRec_count=data['pub_rec'].value_counts().values.tolist()
-    index=pubRec_count.index
     result={
         'data':[
                 {
@@ -56,7 +55,6 @@ def dti(request):
     result_data=[]
     for r in ran:
         pubRec_dti=data[(data['dti']>=r[0]) & (data['dti']<r[1])]#取出该范围的所有行
-        print('range',pubRec_dti.shape)
         pubRec_index=pubRec_dti['pub_rec'].value_counts().index.tolist()#index--pub_rec的值
         pubRec_count=pubRec_dti['pub_rec'].value_counts()#按照pubRec分类
         #补全
