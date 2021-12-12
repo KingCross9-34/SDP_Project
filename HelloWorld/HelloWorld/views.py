@@ -1,7 +1,7 @@
 from django.shortcuts import render
 import pandas as pd
 from django.http import HttpResponse,JsonResponse
-
+import numpy as np
 # Create your views here.
  
 #10000个用户数据
@@ -16,11 +16,35 @@ def getUserInfo(request):
         response={'status':404}
         return JsonResponse(response)
  
-    data=pd.read_csv('static/data.csv',nrows=10000)
+    data=pd.read_csv('static/a.csv',nrows=10000)
     userInfo=data.loc[id]
+    emp_title=userInfo['emp_title']
+    emp_length=userInfo['emp_length']
+    if np.isnan(emp_title):
+        emp_title=""
+        emp_length=""
+    
+    acc_open_past_24mths=userInfo['acc_open_past_24mths']
+    inq_last_12m=userInfo['inq_last_12m']
+    inq_last_6mths=userInfo['inq_last_6mths']
+    if np.isnan(acc_open_past_24mths):
+        acc_open_past_24mths=''
+    if np.isnan(inq_last_12m):
+        inq_last_12m=''
+    if np.isnan(inq_last_6mths):
+        inq_last_6mths=''
+
     result={
-    'emp_title':userInfo['emp_title'],'emp_length':userInfo['emp_length'],
-    'annual_inc':userInfo['annual_inc'],'home_ownership':userInfo['home_ownership'],'loan_amnt':userInfo['loan_amnt']
+    'emp_title':emp_title,
+    'emp_length':emp_length,
+    'annual_inc':userInfo['annual_inc'],
+    'home_ownership':userInfo['home_ownership'],
+    'loan_amnt':userInfo['loan_amnt'],
+    'id':id,
+    "acc_open_past_24mths": acc_open_past_24mths,
+	"inq_last_12m": inq_last_12m,
+	"inq_last_6mths": inq_last_6mths,
+	"addr_state": userInfo["addr_state"],
     }
     result_object={'data':result,'status':200}
     return JsonResponse(result_object)

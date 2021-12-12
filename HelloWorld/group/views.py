@@ -32,7 +32,7 @@ def pubRec(request):
     return JsonResponse(result)
 
 
-#按工作时长分组
+#按地区分组
 def region(request):
     result_data=pubRec_func('addr_state')
     result={
@@ -61,6 +61,7 @@ def dti(request):
         for i in range(11):
             if i not in pubRec_index:
                 pubRec_count.loc[i]=0
+        
         pubRec_count=pubRec_count.sort_index().values.tolist()
         tmp={
                 'dti':r,
