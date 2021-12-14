@@ -1,7 +1,8 @@
 from django.shortcuts import render
 import pandas as pd
-from django.http import HttpResponse,JsonResponse
+from django.http import JsonResponse
 import numpy as np
+import json
 # Create your views here.
  
 #10000个用户数据
@@ -16,11 +17,11 @@ def getUserInfo(request):
         response={'status':404}
         return JsonResponse(response)
  
-    data=pd.read_csv('static/a.csv',nrows=10000)
+    data=pd.read_csv('static/data.csv',nrows=10000)
     userInfo=data.loc[id]
     emp_title=userInfo['emp_title']
     emp_length=userInfo['emp_length']
-    if np.isnan(emp_title):
+    if pd.isna(emp_title):
         emp_title=""
         emp_length=""
     
@@ -45,6 +46,7 @@ def getUserInfo(request):
 	"inq_last_12m": inq_last_12m,
 	"inq_last_6mths": inq_last_6mths,
 	"addr_state": userInfo["addr_state"],
+    'DIYTags':userInfo['DIYTags'].split()
     }
     result_object={'data':result,'status':200}
     return JsonResponse(result_object)
@@ -199,4 +201,28 @@ def getRiskProfile(request):
     return JsonResponse(result_object)
 
 
+#post tags
+def DIYTags(request): 
+    json_data=json.loads(request.body.decode('utf-8'))
+    id=json_data['id']
+    tags=json_data['tags']
+    
+    print('tags',tags)
+    tags_string=' '.join(tags)
+    data=pd.read_csv('static/data.csv',nrows=10000)
+    data.loc[id,'DIYTags']=tags_string
+    data.to_csv('static/data.csv')
 
+    return_object={
+        'id':id,
+        'tags':data.loc[id,'DIYTags'].split()
+    }
+    return JsonResponse(return_object) 
+
+
+    
+
+
+def test(request):
+    print(request)
+    return JsonResponse(1)

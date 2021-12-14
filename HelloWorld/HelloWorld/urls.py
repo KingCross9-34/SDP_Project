@@ -23,6 +23,7 @@ urlpatterns = [
     path('loanInfo',views.getLoanInfo),
     path('loanDefault',views.getLoanDefault),
     path('riskProfile',views.getRiskProfile),
+    path('DIYTags',views.DIYTags),
     path('group/', include('group.urls')),
     path('personal/', include('personal.urls'))
 
