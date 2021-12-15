@@ -143,7 +143,7 @@ def acc_open(request):
 def avg_cur_bal(request):
     data=pd.read_csv('static/data.csv',nrows=10000)
     #50000一个间隔
-    ran=[[0,50000],[50000,100000],[100000,150000],[150000,203201]]#设定的avg_cur_bal范围分类
+    ran=[[0,10000],[10000,30000],[30000,100000],[100000,203201]]#设定的avg_cur_bal范围分类
     result_data=[]
     for r in ran:
         pubRec_avg=data[(data['avg_cur_bal']>=r[0]) & (data['avg_cur_bal']<r[1])]#取出该范围的所有行

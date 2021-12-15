@@ -209,7 +209,7 @@ def getRiskProfile(request):
 #add new one
 def DIYTags(request): 
     json_data=json.loads(request.body.decode('utf-8'))
-    id=json_data['id']
+    id=int(json_data['id'])
     tags=json_data['tags']
     data=pd.read_csv('static/data.csv',nrows=10000)
     new_tags=[]

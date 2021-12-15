@@ -56,3 +56,21 @@ def predict_logictic(request):
     }
     return JsonResponse(object)
     
+def high_risk(request):
+    i=0
+    data=pd.read_csv('static/final.csv')
+    svm=joblib.load('static/model/svm.pkl')
+    r=[]
+    #前100个
+    for i in range(100):
+        x=data.loc[i]
+        result=int(svm.predict([x.to_numpy()])[0])
+        if result==1:
+            r.append(i)
+    return_object={
+        "ids":r
+    }
+    return JsonResponse(return_object)
+
+
+
