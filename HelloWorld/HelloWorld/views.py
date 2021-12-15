@@ -35,6 +35,10 @@ def getUserInfo(request):
     if np.isnan(inq_last_6mths):
         inq_last_6mths=''
 
+    tags=userInfo['DIYTags']
+    if pd.isna(tags):
+        tags=''
+    print('tags:',tags)
     result={
     'emp_title':emp_title,
     'emp_length':emp_length,
@@ -46,7 +50,7 @@ def getUserInfo(request):
 	"inq_last_12m": inq_last_12m,
 	"inq_last_6mths": inq_last_6mths,
 	"addr_state": userInfo["addr_state"],
-    'DIYTags':userInfo['DIYTags'].split()
+    'DIYTags':tags
     }
     result_object={'data':result,'status':200}
     return JsonResponse(result_object)
@@ -206,8 +210,6 @@ def DIYTags(request):
     json_data=json.loads(request.body.decode('utf-8'))
     id=json_data['id']
     tags=json_data['tags']
-    
-    print('tags',tags)
     tags_string=' '.join(tags)
     data=pd.read_csv('static/data.csv',nrows=10000)
     data.loc[id,'DIYTags']=tags_string
