@@ -89,6 +89,98 @@ def dti(request):
     }
     return JsonResponse(result)
 
+#home_ownership  
+def home_ownership(request):
+    result_data=pubRec_func('home_ownership')
+    result={
+        'data':result_data
+    }
+    return JsonResponse(result)
+
+
+#acc_open_past_24mths  
+def acc_open(request):
+    data=pd.read_csv('static/data.csv',nrows=10000)
+    ran=[[0,2],[2,4],[4,5],[5,10],[10,31]]#设定的acc范围分类
+    result_data=[]
+    for r in ran:
+        pubRec_acc=data[(data['acc_open_past_24mths']>=r[0]) & (data['acc_open_past_24mths']<r[1])]#取出该范围的所有行
+        pubRec_index=pubRec_acc['pub_rec'].value_counts().index.tolist()#index--pub_rec的值
+        pubRec_count=pubRec_acc['pub_rec'].value_counts()#按照pubRec分类
+        #补全
+        for i in range(11):
+            if i not in pubRec_index:
+                pubRec_count.loc[i]=0
+        
+        pubRec_count=pubRec_count.sort_index().values.tolist()
+        tmp={
+                'acc_open_past_24mths':r,
+                'pubRec':[{
+                'class':1,
+                'pubRec':[0],'amount':[pubRec_count[0]]
+                },
+                {
+                'class':2,
+                'pubRec':[1],'amount':[pubRec_count[1]]
+                },
+                {
+                'class':3,
+                'pubRec':[2,3,4],'amount':pubRec_count[2:5]
+                },
+                {
+                'class':4,
+                'pubRec':[5,6,7,8,9,10],'amount':pubRec_count[5:]
+                }]
+        }
+        result_data.append(tmp)
+
+    result={
+        'data':result_data
+    }
+    return JsonResponse(result)
+
+#avg_cur_bal  
+def avg_cur_bal(request):
+    data=pd.read_csv('static/data.csv',nrows=10000)
+    #50000一个间隔
+    ran=[[0,50000],[50000,100000],[100000,150000],[150000,203201]]#设定的avg_cur_bal范围分类
+    result_data=[]
+    for r in ran:
+        pubRec_avg=data[(data['avg_cur_bal']>=r[0]) & (data['avg_cur_bal']<r[1])]#取出该范围的所有行
+        pubRec_index=pubRec_avg['pub_rec'].value_counts().index.tolist()#index--pub_rec的值
+        pubRec_count=pubRec_avg['pub_rec'].value_counts()#按照pubRec分类
+        #补全
+        for i in range(11):
+            if i not in pubRec_index:
+                pubRec_count.loc[i]=0
+        
+        pubRec_count=pubRec_count.sort_index().values.tolist()
+        tmp={
+                'avg_cur_bal':r,
+                'pubRec':[{
+                'class':1,
+                'pubRec':[0],'amount':[pubRec_count[0]]
+                },
+                {
+                'class':2,
+                'pubRec':[1],'amount':[pubRec_count[1]]
+                },
+                {
+                'class':3,
+                'pubRec':[2,3,4],'amount':pubRec_count[2:5]
+                },
+                {
+                'class':4,
+                'pubRec':[5,6,7,8,9,10],'amount':pubRec_count[5:]
+                }]
+        }
+        result_data.append(tmp)
+
+    result={
+        'data':result_data
+    }
+    return JsonResponse(result)
+
 #业务建议
 
 
