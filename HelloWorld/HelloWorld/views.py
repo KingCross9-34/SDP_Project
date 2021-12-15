@@ -206,12 +206,20 @@ def getRiskProfile(request):
 
 
 #post tags
+#add new one
 def DIYTags(request): 
     json_data=json.loads(request.body.decode('utf-8'))
     id=json_data['id']
     tags=json_data['tags']
-    tags_string=' '.join(tags)
     data=pd.read_csv('static/data.csv',nrows=10000)
+    new_tags=[]
+    if not(pd.isna(data.loc[id]['DIYTags'])):
+        old_tags=data.loc[id]['DIYTags'].split()
+        new_tags=tags+old_tags
+    else:
+        new_tags=tags  
+    
+    tags_string=' '.join(new_tags)
     data.loc[id,'DIYTags']=tags_string
     data.to_csv('static/data.csv')
 
