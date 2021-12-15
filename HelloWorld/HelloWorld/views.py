@@ -50,7 +50,7 @@ def getUserInfo(request):
 	"inq_last_12m": inq_last_12m,
 	"inq_last_6mths": inq_last_6mths,
 	"addr_state": userInfo["addr_state"],
-    'DIYTags':tags
+    'DIYTags':tags.split()
     }
     result_object={'data':result,'status':200}
     return JsonResponse(result_object)
